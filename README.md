@@ -15,14 +15,12 @@ Um projeto de Visão Computacional utilizando Deep Learning com PyTorch para ide
     * [Otimização do Modelo](#otimização-do-modelo)
     * [Avaliação e Monitoramento](#avaliação-e-monitoramento)
 6.  [Como Executar o Projeto](#6-como-executar-o-projeto)
+    * [Testando Gatos Desconhecidos](#testando-gatos-desconhecidos)
 7.  [Interpretando os Resultados](#7-interpretando-os-resultados)
     * [Saída do Treinamento](#saída-do-treinamento)
     * [Gráficos de Desempenho](#gráficos-de-desempenho)
     * [Matriz de Confusão](#matriz-de-confusão)
     * [Relatório de Classificação (Precision, Recall, F1-Score)](#relatório-de-classificação-precision-recall-f1-score)
-8.  [Contribuições](#8-contribuições)
-9.  [Licença](#9-licença)
-
 ---
 
 ## 1. Visão Geral do Projeto
@@ -36,13 +34,16 @@ O pipeline envolve desde o pré-processamento das imagens até o treinamento do 
 A organização dos arquivos e diretórios é crucial para a clareza e manutenção do projeto:
 ```bash
 IA/
-├── gatos/                  # Diretório raiz do dataset. Contém subpastas, cada uma nomeada com o nome de um gato.
+├── gatos/                  # Diretório raiz do dataset. Contém subpastas, cada uma nomeada com o nome de um gato (incluindo 'gatos_da_uf/').
 │   ├── [nome_do_gato_1]/   # Ex: 'hans_kelsen/'
 │   │   ├── imagem_1.jpg
 │   │   └── ...
-│   ├── [nome_do_gato_2]/   # Ex: 'lina/'
-│   │   ├── imagem_1.jpg
+│   ├── gatos_da_uf/        # Subpasta para gatos da UFMS sem nome específico.
+│   │   ├── gato_desconhecido_1.jpg
 │   │   └── ...
+│   └── ...
+├── imagens_teste/          # Diretório para imagens que serão usadas para testar se o gato pertence ao dataset ou é desconhecido.
+│   ├── imagem_teste_1.jpg
 │   └── ...
 ├── modelos/                # Diretório para salvar os modelos treinados e métricas de treinamento (criado automaticamente).
 ├── pre_processamento.py    # Script com funções para preparar as imagens (redimensionamento, denoising).
@@ -51,6 +52,7 @@ IA/
 ├── treino_gatos.py         # Script principal para treinar o modelo.
 ├── avaliar_modelo.py       # Script para realizar a avaliação detalhada do modelo treinado.
 ├── visualizar_aumento.py   # Script para visualizar exemplos de imagens com aumento de dados.
+├── testar_gatos_desconhecidos.py # Script para testar imagens de um diretório específico, classificando ou indicando se é desconhecido.
 └── main.py                 # Script de menu interativo para executar as diferentes partes do projeto.
 ```
 ## 3. Pré-requisitos e Instalação
@@ -69,7 +71,9 @@ pip install torch torchvision numpy opencv-python scikit-learn matplotlib seabor
 ```
 
 Observação sobre GPU (CUDA):
-Se você possui uma GPU NVIDIA e deseja acelerar o treinamento, instale o PyTorch com suporte a CUDA. As instruções variam ligeiramente dependendo do seu sistema operacional e versão de CUDA. Consulte o site oficial do PyTorch para a instalação correta: https://pytorch.org/get-started/locally/
+Se você possui uma GPU NVIDIA e deseja acelerar o treinamento, instale o PyTorch com suporte a CUDA. 
+
+As instruções variam ligeiramente dependendo do seu sistema operacional e versão de CUDA. Consulte o site oficial do PyTorch para a instalação correta: https://pytorch.org/get-started/locally/
 
 ## 4. Configuração do Dataset
 O dataset de imagens deve estar localizado na pasta gatos/ na raiz do projeto.
@@ -155,14 +159,6 @@ Certifique-se de ter seguido as etapas de Pré-requisitos e Instalação e Confi
 
 Para facilitar a execução, utilize o script main.py com um menu interativo:
 ```bash
-# Navegue até a pasta raiz do projeto (IA/)
-cd IA/
-
-# Ative seu ambiente virtual (se ainda não estiver ativado)
-# No Windows: .\venv\Scripts\activate
-# No macOS/Linux: source venv/bin/activate
-
-# Execute o script principal
 python main.py
 ```
 Você verá um menu com as seguintes opções:
@@ -173,6 +169,13 @@ Menu Principal do Projeto Gatos IA
 1. Treinar Modelo (treino_gatos.py)
 2. Avaliar Modelo (avaliar_modelo.py)
 3. Visualizar Aumento de Dados (visualizar_aumento.py)
+4. Testar Gatos Desconhecidos (testar_gatos_desconhecidos.py)
 0. Sair
 ==============================
 ```
+## Testando Gatos Desconhecidos
+Ao escolher a opção 4. Testar Gatos Desconhecidos, o script testar_gatos_desconhecidos.py será executado automaticamente.
+
+- Ele irá procurar por imagens dentro do diretório imagens_teste/ (localizado na raiz do projeto).
+- Para cada imagem, o modelo tentará classificá-la como um gato conhecido (com nome), um "gato da UF" (sem nome específico), ou indicará que é um gato desconhecido/fora do dataset se a confiança da previsão for abaixo de um limiar (CONFIDENCE_THRESHOLD).
+- Os resultados serão exibidos no console e visualmente em uma janela pop-up para cada imagem.
