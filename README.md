@@ -34,6 +34,7 @@ O pipeline envolve desde o pré-processamento das imagens até o treinamento do 
 ## 2. Estrutura do Projeto
 
 A organização dos arquivos e diretórios é crucial para a clareza e manutenção do projeto:
+```bash
 IA/
 ├── gatos/                  # Diretório raiz do dataset. Contém subpastas, cada uma nomeada com o nome de um gato.
 │   ├── [nome_do_gato_1]/   # Ex: 'hans_kelsen/'
@@ -51,3 +52,32 @@ IA/
 ├── avaliar_modelo.py       # Script para realizar a avaliação detalhada do modelo treinado.
 ├── visualizar_aumento.py   # Script para visualizar exemplos de imagens com aumento de dados.
 └── main.py                 # Script de menu interativo para executar as diferentes partes do projeto.
+```
+## 3. Pré-requisitos e Instalação
+
+Para rodar este projeto, você precisará ter o Python instalado e as bibliotecas listadas abaixo.
+
+### 3.1. Pré-requisitos
+
+* **Python 3.8 ou superior** (recomendado Python 3.9, 3.10 ou 3.11).
+
+### 3.2. Instalação das Bibliotecas
+
+É altamente recomendável criar um ambiente virtual para gerenciar as dependências do projeto.
+
+```bash
+# 1. Navegue até a pasta raiz do seu projeto (IA/)
+cd IA/
+
+# 2. Crie um ambiente virtual (se ainda não tiver um)
+python -m venv venv
+
+# 3. Ative o ambiente virtual
+# No Windows:
+.\venv\Scripts\activate
+# No macOS/Linux:
+source venv/bin/activate
+
+# 4. Instale as bibliotecas necessárias
+pip install torch torchvision numpy opencv-python scikit-learn matplotlib seaborn
+```
