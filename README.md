@@ -179,3 +179,67 @@ Ao escolher a opção 4. Testar Gatos Desconhecidos, o script testar_gatos_desco
 - Ele irá procurar por imagens dentro do diretório imagens_teste/ (localizado na raiz do projeto).
 - Para cada imagem, o modelo tentará classificá-la como um gato conhecido (com nome), um "gato da UF" (sem nome específico), ou indicará que é um gato desconhecido/fora do dataset se a confiança da previsão for abaixo de um limiar (CONFIDENCE_THRESHOLD).
 - Os resultados serão exibidos no console e visualmente em uma janela pop-up para cada imagem.
+
+## 7. Interpretando os Resultados
+Após executar as opções de treinamento e avaliação, você obterá diversas saídas e visualizações importantes que ajudam a entender o desempenho do seu modelo.
+
+### 7.1. Saída do Treinamento
+No console, durante o treinamento (Opção 1), você verá o progresso a cada época, semelhante a este formato:
+```bash
+Epoch X/Y
+ ============
+Treino Perda: A.AAAA, Treino Acurácia: B.BBBB, 
+Validação Perda: C.CCCC, Validação Acurácia: D.DDDD, 
+Tempo da Época: E.EEs
+Acuracia melhorou para: D.DDDD
+```
+- **`Epoch X/Y:`** Indica a época atual (`X`) de um total de `Y` épocas configuradas.
+- **`Treino Perda:`** O valor da função de perda nos dados de treinamento.
+   - **Ideal:** Deve ser baixo e diminuir consistentemente ao longo das épocas.
+   - **Significado:** Mostra o quão bem o modelo está aprendendo e ajustando-se aos dados que já viu.
+-**`Treino Acurácia:`** A porcentagem de previsões corretas nos dados de treinamento.
+   - **Ideal:** Deve ser alta (próxima de 1.0 ou 100%) e aumentar consistentemente.
+   - **Significado:** Mostra a performance do modelo nos dados que ele usou para aprender.
+- **`Validação Perda`:** O valor da função de perda nos dados de validação (dados que o modelo nunca viu durante o treinamento).
+   - **Ideal:** Deve ser baixo e próximo da `Treino Perda`. Deve diminuir inicialmente e pode estabilizar ou até subir se houver overfitting.
+   - **Significado:** É uma medida crucial da capacidade do modelo de generalizar para dados novos.
+- **`Validação Acurácia:`** A porcentagem de previsões corretas nos dados de validação.
+   - **Ideal:** Deve ser alta (próxima de 1.0 ou 100%) e próxima da `Treino Acurácia`. Deve aumentar inicialmente e estabilizar ou cair se houver overfitting.
+   - **Significado:** É a métrica mais importante para avaliar o desempenho do seu modelo no "mundo real".
+- **`Tempo da Época:`** O tempo que levou para completar uma época de treinamento e validação.
+
+### Sinal de Alerta: Overfitting
+Se a `Treino Acurácia` for muito alta e a `Treino Perda` muito baixa, mas a `Validação Acurácia` for significativamente menor e/ou a `Validação Perda` for muito maior, isso indica **overfitting**. O modelo memorizou os dados de treino e perdeu a capacidade de generalizar.
+
+### 7.2. Gráficos de Desempenho
+Após a avaliação (Opção 2), serão gerados gráficos de linha que visualizam a evolução das métricas ao longo das épocas.
+
+ - **Curva de Perda (Loss Curve):** Mostra a `Treino Perda` e `Validação Perda` por época.
+   - **Ideal:** Ambas as curvas devem diminuir. A `Validação Perda` deve seguir de perto a `Treino Perda`.
+   - **Overfitting**: A `Treino Perd`a continua caindo, mas a `Validação Perda` começa a subir.
+- **Curva de Acurácia (Accuracy Curve):** Mostra a `Treino Acurácia` e `Validação Acurácia` por época.
+   - **Ideal:** Ambas as curvas devem subir. A `Validação Acurácia` deve seguir de perto a `Treino Acurácia`.
+   - **Overfitting:** A `Treino Acuráci` continua subindo, mas a `Validação Acurácia` se estabiliza ou cai.
+
+### 7.3. Matriz de Confusão
+Gerada pelo `avaliar_modelo.py`, a matriz de confusão é uma tabela visual que detalha o desempenho do classificador para cada classe:
+
+- **Eixo Y ("Verdadeiro"):** A classe real à qual a imagem pertence.
+- **Eixo X ("Previsão"):** A classe que o modelo previu para a imagem.
+- **Diagonal Principal (valores mais altos e escuros):** Representa as classificações corretas. Onde a previsão corresponde ao valor verdadeiro.
+- **Células Fora da Diagonal Principal:** Representam as classificações incorretas (erros).
+   - Um valor na linha "Gato A" e coluna "Gato B" significa que `N` imagens do Gato A real foram erroneamente previstas como Gato B. Isso ajuda a identificar quais gatos o modelo está confundindo entre si.
+- **Linhas/Colunas Vazias:** Se uma linha (ou coluna) está completamente vazia (todos zeros), isso pode indicar que não havia nenhuma imagem daquela classe no conjunto de validação. A Divisão Estratificada ajuda a minimizar este problema em datasets pequenos, garantindo que todas as classes estejam representadas.
+
+### 7.4. Relatório de Classificação (Precision, Recall, F1-Score)
+Este relatório, também gerado pelo `avaliar_modelo.py`, fornece métricas detalhadas por classe, que são mais informativas que a acurácia geral, especialmente em datasets com classes desbalanceadas:
+
+- `precision` **(Precisão):** Para uma dada classe, é a proporção de previsões positivas corretas em relação ao total de previsões positivas feitas para aquela classe.
+   - **Ideal:** Alto. Significa que, quando o modelo diz que é um gato específico, ele geralmente está certo (poucos falsos positivos).
+- `recall` **(Sensibilidade):** Para uma dada classe, é a proporção de instâncias positivas reais que foram corretamente identificadas pelo modelo.
+   - **Ideal:** Alto. Significa que o modelo consegue encontrar a maioria dos gatos daquela classe quando eles estão presentes (poucos falsos negativos).
+- `f1-score:` É a média harmônica (equilibrada) entre Precision e Recall.
+   - **Ideal:** Alto. É uma métrica útil quando você precisa de um bom equilíbrio entre Precisão e Recall.
+- `support:` O número real de imagens de cada classe no conjunto de validação/teste.
+
+Essas métricas são cruciais para ter uma visão completa do desempenho do seu modelo, identificando não apenas a taxa geral de acertos, mas também onde ele está acertando e errando para cada categoria de gato.
