@@ -197,7 +197,7 @@ Acuracia melhorou para: D.DDDD
 - **`Treino Perda:`** O valor da função de perda nos dados de treinamento.
    - **Ideal:** Deve ser baixo e diminuir consistentemente ao longo das épocas.
    - **Significado:** Mostra o quão bem o modelo está aprendendo e ajustando-se aos dados que já viu.
--**`Treino Acurácia:`** A porcentagem de previsões corretas nos dados de treinamento.
+- **`Treino Acurácia:`** A porcentagem de previsões corretas nos dados de treinamento.
    - **Ideal:** Deve ser alta (próxima de 1.0 ou 100%) e aumentar consistentemente.
    - **Significado:** Mostra a performance do modelo nos dados que ele usou para aprender.
 - **`Validação Perda`:** O valor da função de perda nos dados de validação (dados que o modelo nunca viu durante o treinamento).
