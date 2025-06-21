@@ -126,21 +126,33 @@ def train_model(root_dir, num_epochs, batch_size, learning_rate, num_workers=0):
     total_duration = time.time() - total_start_time
     print(f"\n--- Treinamento Concluído! Tempo Total: {total_duration:.2f} segundos ---")
 
-    # Salva métricas para análise posterior
+    # Salva as métricas de treinamento e validação
     np.save(os.path.join("modelos", "train_losses.npy"), np.array(train_losses))
     np.save(os.path.join("modelos", "val_losses.npy"), np.array(val_losses))
     np.save(os.path.join("modelos", "train_accuracies.npy"), np.array(train_accuracies))
     np.save(os.path.join("modelos", "val_accuracies.npy"), np.array(val_accuracies))
     print("Métricas de treinamento salvas para plotagem.")
 
+    # Calcular o número total de amostras processadas
+    total_samples_processed_train = len(train_dataset) * num_epochs
+    total_samples_processed_val = len(val_dataset) * num_epochs
+    
+    print(f"\n--- Resumo do Processamento ---")
+    print(f"Número total de amostras (imagens originais) no conjunto de TREINO: {len(train_dataset)}")
+    print(f"Número total de amostras (imagens originais) no conjunto de VALIDAÇÃO: {len(val_dataset)}")
+    print(f"Modelo treinado por: {num_epochs} épocas")
+    print(f"Número total de amostras processadas no TREINO (com aumento): {total_samples_processed_train}")
+    print(f"Número total de amostras processadas na VALIDAÇÃO: {total_samples_processed_val}")
+
+    
     # Retorna objetos úteis para avaliação posterior
     return model, train_losses, val_losses, train_accuracies, val_accuracies, class_names, val_loader
 
 if __name__ == '__main__':
     ROOT_DIR = 'gatos'
-    NUM_EPOCHS = 8
-    BATCH_SIZE = 32
-    LEARNING_RATE = 0.001
+    NUM_EPOCHS = 10
+    BATCH_SIZE = 32 
+    LEARNING_RATE = 0.001 # Taxa de aprendizado (pesos)
     NUM_WORKERS = 0  # 0 para Windows
     
     # Traina o modelo e salva os resultados
