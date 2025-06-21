@@ -18,7 +18,7 @@ class GatosCNN(nn.Module):
         # Para entrada 224x224, após 4 poolings 2x2 (224/16 = 14), e 256 canais.
         self.fc1 = nn.Linear(256 * 14 * 14, 512)
         self.fc2 = nn.Linear(512, num_classes)
-        self.dropout = nn.Dropout(0.5)
+        self.dropout = nn.Dropout(0.6) # Taxa de dropout de 60% para evitar overfitting
 
     # Método de passagem direta
     # Recebe um tensor de entrada x e retorna a saída da rede
