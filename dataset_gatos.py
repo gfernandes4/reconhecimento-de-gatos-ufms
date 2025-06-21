@@ -27,7 +27,6 @@ class GatosDataset(Dataset):
                         self.labels.append(idx)
 
         # Transformação padrão
-        
         self.base_transform = transforms.Compose([
             transforms.ToPILImage(),
             transforms.ToTensor(),
@@ -36,10 +35,14 @@ class GatosDataset(Dataset):
         # Transforms diferentes para treino e validação
         if is_train:
             self.transform = transforms.Compose([
-                transforms.ToPILImage(),
-                transforms.RandomResizedCrop(self.target_size[0], scale=(0.8, 1.0)),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
+                transforms.ToPILImage(), # Converte NumPy array para PIL Image
+                transforms.RandomResizedCrop(self.target_size[0], scale=(0.7, 1.0), ratio=(0.75, 1.33)), # Ajuste o scale e ratio
+                transforms.RandomHorizontalFlip(p=0.5), # Inverte horizontalmente com 50% de chance
+                transforms.RandomRotation(degrees=45), # Rotação aleatória em até 15 graus
+                transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1), # Ajustes de cor
+                transforms.RandomPerspective(distortion_scale=0.2, p=0.3), # Opcional: distorção de perspectiva
+                transforms.RandomAffine(degrees=0, translate=(0.1, 0.1)), # Opcional: translação (deslocamento)
+                transforms.ToTensor(), # Converte para Tensor e normaliza para [0,1]
             ])
         else:
             self.transform = transforms.Compose([
