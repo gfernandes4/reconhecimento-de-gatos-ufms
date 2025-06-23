@@ -9,7 +9,7 @@ import time
 import numpy as np
 from sklearn.model_selection import StratifiedShuffleSplit 
 
-# --- Função principal para treinar o modelo ---
+# Função principal para treinar o modelo 
 def train_model(root_dir, num_epochs, batch_size, learning_rate, num_workers=0):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Usando dispositivo: {device}")
@@ -52,7 +52,7 @@ def train_model(root_dir, num_epochs, batch_size, learning_rate, num_workers=0):
 
     # Configura o critério de perda e o otimizador
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-4) # weight decay para regularização, força os pesos a serem pequenos
 
     print("\n--- Iniciando o Treinamento ---")
     best_accuracy = 0.0
@@ -84,7 +84,7 @@ def train_model(root_dir, num_epochs, batch_size, learning_rate, num_workers=0):
             total_train += labels.size(0)
             correct_train += (predicted == labels).sum().item()
         # Calcula a perda e acurácia média para o epoch de treino
-        epoch_loss = running_loss / len(train_dataset)
+        epoch_loss = running_loss / len(train_dataset) 
         epoch_accuracy = correct_train / total_train
         train_losses.append(epoch_loss)
         train_accuracies.append(epoch_accuracy)
@@ -104,15 +104,13 @@ def train_model(root_dir, num_epochs, batch_size, learning_rate, num_workers=0):
                 total_val += labels.size(0)
                 correct_val += (predicted == labels).sum().item()
         # Calcula a perda e acurácia média para o epoch de validação
-        epoch_val_loss = val_loss / len(val_dataset)
         epoch_val_accuracy = correct_val / total_val
-        val_losses.append(epoch_val_loss)
         val_accuracies.append(epoch_val_accuracy)
         # Exibe os resultados do epoch
         epoch_duration = time.time() - epoch_start_time
         print(f"\nEpoch {epoch+1}/{num_epochs}\n ============ \n"
               f"Treino Perda: {epoch_loss:.4f}, Treino Acurácia: {epoch_accuracy:.4f}, \n"
-              f"Validação Perda: {epoch_val_loss:.4f}, Validação Acurácia: {epoch_val_accuracy:.4f}, \n"
+              f"Validação Acurácia: {epoch_val_accuracy:.4f}, \n"
               f"Tempo da Época: {epoch_duration:.2f}s")
 
         # Salva o melhor modelo
@@ -121,7 +119,6 @@ def train_model(root_dir, num_epochs, batch_size, learning_rate, num_workers=0):
             model_save_path = os.path.join("modelos", "best_gatos_classifier.pth")
             os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
             torch.save(model.state_dict(), model_save_path)
-            print(f"Acuracia melhorou para: {best_accuracy:.4f}")
             
     total_duration = time.time() - total_start_time
     print(f"\n--- Treinamento Concluído! Tempo Total: {total_duration:.2f} segundos ---")
@@ -159,6 +156,4 @@ if __name__ == '__main__':
     trained_model, train_losses, val_losses, train_accuracies, val_accuracies, class_names, val_loader_for_eval = \
         train_model(ROOT_DIR, NUM_EPOCHS, BATCH_SIZE, LEARNING_RATE, NUM_WORKERS)
 
-    print("\nTreinamento concluído. Para visualizar os resultados e fazer a avaliação detalhada, execute 'python avaliar_modelo.py'")
-    print(f"Os dados para avaliação detalhada estão no diretório: {os.path.join(ROOT_DIR)}")
-    print(f"O modelo salvo está em: {os.path.join('modelos', 'best_gatos_classifier.pth')}")
+    print("\nTreinamento concluído.")

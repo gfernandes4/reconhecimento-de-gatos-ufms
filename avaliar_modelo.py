@@ -13,7 +13,7 @@ import numpy as np # Necessário para np.concatenate
 ROOT_DIR = 'gatos' # Precisa ser o mesmo diretório usado no treino
 MODEL_PATH = os.path.join("modelos", "best_gatos_classifier.pth")
 BATCH_SIZE = 32 # O mesmo batch_size ou um múltiplo dele
-NUM_WORKERS = 0 # Mude para 4 se usou 4 no treino e não teve problemas
+NUM_WORKERS = 0 
 
 if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -88,48 +88,7 @@ if __name__ == '__main__':
     print("\nRelatório de Classificação:")
     print(report)
 
-    # --- 5. Visualização dos Gráficos de Treinamento (se dados salvos) ---
-    # Para plotar os gráficos de perda/acurácia, você precisaria salvá-los
-    # de alguma forma no treino_gatos.py (ex: em um arquivo .npy ou json)
-    # e carregá-los aqui.
-    # Por simplicidade, vamos mostrar um placeholder e a sugestão de como fazer.
-
     print("\n--- Para visualizar os gráficos de perda e acurácia do treinamento ---")
     print("Você pode modificar 'treino_gatos.py' para salvar as listas 'train_losses', 'val_losses', etc.,")
     print("e então carregá-las aqui em 'avaliar_modelo.py' para plotar. Ex: usando numpy.save ou json.")
     
-    # Exemplo de como carregaria e plotaria (com dados fictícios ou salvos):
-    # try:
-    #     loaded_train_losses = np.load(os.path.join("modelos", "train_losses.npy"))
-    #     loaded_val_losses = np.load(os.path.join("modelos", "val_losses.npy"))
-    #     loaded_train_accuracies = np.load(os.path.join("modelos", "train_accuracies.npy"))
-    #     loaded_val_accuracies = np.load(os.path.join("modelos", "val_accuracies.npy"))
-        
-    #     epochs_range = range(1, len(loaded_train_losses) + 1)
-        
-    #     plt.figure(figsize=(12, 5))
-    #     plt.subplot(1, 2, 1)
-    #     plt.plot(epochs_range, loaded_train_losses, label='Perda de Treino')
-    #     plt.plot(epochs_range, loaded_val_losses, label='Perda de Validação')
-    #     plt.title('Perda de Treino e Validação por Época')
-    #     plt.xlabel('Época')
-    #     plt.ylabel('Perda')
-    #     plt.legend()
-    #     plt.grid(True)
-
-    #     plt.subplot(1, 2, 2)
-    #     plt.plot(epochs_range, loaded_train_accuracies, label='Acurácia de Treino')
-    #     plt.plot(epochs_range, loaded_val_accuracies, label='Acurácia de Validação')
-    #     plt.title('Acurácia de Treino e Validação por Época')
-    #     plt.xlabel('Época')
-    #     plt.ylabel('Acurácia')
-    #     plt.legend()
-    #     plt.grid(True)
-
-    #     plt.tight_layout()
-    #     plt.savefig(os.path.join("modelos", "training_performance.png"))
-    #     plt.show()
-    #     plt.close()
-
-    # except FileNotFoundError:
-    #     print("Arquivos de métricas de treinamento não encontrados para plotagem.")

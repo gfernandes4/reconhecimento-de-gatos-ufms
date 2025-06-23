@@ -24,7 +24,7 @@ def load_model_and_metadata():
     print("Carregando informações do dataset para inicializar o modelo...")
     
     temp_dataset_info = GatosDataset(root_dir='gatos', is_train=False) 
-    num_classes = len(temp_dataset_info.idx_to_class)
+    num_classes = len(temp_dataset_info.idx_to_class) # Número de classes detectadas
     class_names = temp_dataset_info.idx_to_class # Lista de nomes das classes
     
     model = GatosCNN(num_classes=num_classes).to(DEVICE)
@@ -76,7 +76,7 @@ def classify_and_display_image(image_path, model, class_names, confidence_thresh
         if confidence >= confidence_threshold:
             status_text = f"Gato identificado: {predicted_class_name}"
         else:
-            status_text = f"Não é um gato da UF (desconhecido/fora do dataset) - Previsão fraca: {predicted_class_name}"
+            status_text = f"Não é um gato da UF (desconhecido/fora do dataset)"
             display_confidence_in_title = False 
 
     print(f"\n--- Imagem: {os.path.basename(image_path)} ---")

@@ -13,12 +13,15 @@ class GatosCNN(nn.Module):
         self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
         self.conv3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1)
         self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.conv4 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, padding=1)
-        self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2)
+        
+        #self.conv4 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, padding=1)
+        #self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2)
         # Para entrada 224x224, após 4 poolings 2x2 (224/16 = 14), e 256 canais.
-        self.fc1 = nn.Linear(256 * 14 * 14, 512)
+        #self.fc1 = nn.Linear(256 * 14 * 14, 512)
+        
+        self.fc1 = nn.Linear(128 * 28 * 28, 512) # Ajustado para 128 canais
         self.fc2 = nn.Linear(512, num_classes)
-        self.dropout = nn.Dropout(0.6) # Taxa de dropout de 60% para evitar overfitting
+        self.dropout = nn.Dropout(0.5) # Taxa de dropout de 50% para evitar overfitting
 
     # Método de passagem direta
     # Recebe um tensor de entrada x e retorna a saída da rede
@@ -26,8 +29,9 @@ class GatosCNN(nn.Module):
         x = self.pool1(F.relu(self.conv1(x)))
         x = self.pool2(F.relu(self.conv2(x)))
         x = self.pool3(F.relu(self.conv3(x)))
-        x = self.pool4(F.relu(self.conv4(x)))
-        x = x.view(-1, 256 * 14 * 14)
+       # x = self.pool4(F.relu(self.conv4(x)))
+        #x = x.view(-1, 256 * 14 * 14)
+        x = x.view(-1, 128 * 28 * 28)
         x = F.relu(self.fc1(x))
         x = self.dropout(x)
         x = self.fc2(x)
