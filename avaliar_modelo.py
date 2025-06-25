@@ -64,7 +64,7 @@ if __name__ == '__main__':
             all_labels.extend(labels.cpu().numpy())
 
     # --- 4. Gerar e Visualizar Métricas de Desempenho ---
-    print("\n--- Gerando Matriz de Confusão e Relatório de Classificação ---")
+    print("\n--- Gerando Matriz de Confusão ---")
     
     # Matriz de Confusão
     cm = confusion_matrix(all_labels, all_preds)
@@ -85,10 +85,5 @@ if __name__ == '__main__':
 
     # Relatório de Classificação (Precision, Recall, F1-Score)
     report = classification_report(all_labels, all_preds, target_names=class_names, zero_division=0)
-    print("\nRelatório de Classificação:")
-    print(report)
-
-    print("\n--- Para visualizar os gráficos de perda e acurácia do treinamento ---")
-    print("Você pode modificar 'treino_gatos.py' para salvar as listas 'train_losses', 'val_losses', etc.,")
-    print("e então carregá-las aqui em 'avaliar_modelo.py' para plotar. Ex: usando numpy.save ou json.")
+    
     
