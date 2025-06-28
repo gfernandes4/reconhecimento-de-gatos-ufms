@@ -134,18 +134,18 @@ def train_model(root_dir, num_epochs, batch_size, learning_rate, num_workers=0):
             print(f"  Acurácia de validação melhorou para: {best_accuracy:.4f} (Modelo Salvo)")
 
     total_duration = time.time() - total_start_time
-    print(f"\n--- Treinamento Concluído! Tempo Total: {total_duration:.2f} segundos ---") # Mantém este print final
+    print(f"\n--- Treinamento Concluído! Tempo Total: {total_duration:.2f} segundos ---") 
 
     np.save(os.path.join("modelos", "train_losses.npy"), np.array(train_losses))
     np.save(os.path.join("modelos", "val_losses.npy"), np.array(val_losses))
     np.save(os.path.join("modelos", "train_accuracies.npy"), np.array(train_accuracies))
     np.save(os.path.join("modelos", "val_accuracies.npy"), np.array(val_accuracies))
-    print("Métricas de treinamento salvas para plotagem.") # Mantém este print
+    print("Métricas de treinamento salvas para plotagem.")
 
     total_samples_processed_train = len(train_dataset) * num_epochs
     total_samples_processed_val = len(val_dataset) * num_epochs
     
-    print(f"\n--- Resumo do Processamento ---") # Mantém este print de resumo
+    print(f"\n--- Resumo do Processamento ---") 
     print(f"Número total de amostras (imagens originais) no conjunto de TREINO: {len(train_dataset)}")
     print(f"Número total de amostras (imagens originais) no conjunto de VALIDAÇÃO: {len(val_dataset)}")
     print(f"Modelo treinado por: {num_epochs} épocas")
@@ -159,7 +159,7 @@ if __name__ == '__main__':
     NUM_EPOCHS = 11
     BATCH_SIZE = 32 
     LEARNING_RATE = 0.001 # Taxa de aprendizado (pesos)
-    NUM_WORKERS = 0  # 0 para Windows
+    NUM_WORKERS = 0 
     
     # Traina o modelo e salva os resultados
     trained_model, train_losses, val_losses, train_accuracies, val_accuracies, class_names, val_loader_for_eval = \
